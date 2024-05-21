@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Post, Category};
+use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
-
 
 class PostController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('authResource:post')->except('index', 'create', 'store');
@@ -21,7 +20,6 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
         $posts = auth()->user()->posts;
         return view('back.posts.index', compact('posts'));
     }
@@ -33,7 +31,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('back.posts.create');
+        $categories = Category::all();
+        return view('back.posts.create', compact('categories'));
     }
 
     /**
@@ -44,7 +43,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {       
-        // dd($request);
         if($request->has('image')){
             $this->uploadImage($request);
         }
@@ -72,7 +70,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('back.posts.edit', compact('post'));
+        $categories = Category::all();
+        return view('back.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -84,8 +83,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        // the update method, only fire its events when the update happens directly on the model,
-        // so we will use save directly on modal instead of mass assignment
         if($request->has('image')){
             $oldImage = $post->image;
             $this->uploadImage($request);
@@ -117,9 +114,7 @@ class PostController extends Controller
     public function uploadImage($request){
         $image = $request->file('image');
         $imageName = time().$image->getClientOriginalName();
-        // add the new file 
         $image->move(public_path('images'),$imageName);
         $request->merge(['image' => $imageName]);
-        // dd($request);
     }
 }

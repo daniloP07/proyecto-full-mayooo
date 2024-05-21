@@ -49,6 +49,8 @@
                     </thead>
                     <tbody>
                         @foreach ($categories as $category)
+                        <p>{{ $category->name }}</p>
+                        
                             <tr>
                                 <td>
                                     #

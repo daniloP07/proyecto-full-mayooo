@@ -1,18 +1,20 @@
+// resources/views/back/categories/create.blade.php
+
 @extends('layouts.back')
+
 @section('breadcrumb')
     <div class="col-sm-6">
         <h1 class="m-0">Dashboard</h1>
-    </div><!-- /.col -->
+    </div>
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Post Add</li>
+            <li class="breadcrumb-item active">Category Add</li>
         </ol>
-    </div><!-- /.col -->
-
+    </div>
 @endsection
+
 @section('content')
-    <!-- Main content -->
     <section class="content">
         <form method="POST" action="{{ route('categories.store') }}">
             @csrf
@@ -24,13 +26,20 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="title">Category Name </label>
+                                <label for="title">Category Name</label>
                                 <input type="text" name="title" id="title" class="form-control" required>
                             </div>
+                            <div class="form-group">
+                                <label for="parent_id">Parent Category</label>
+                                <select name="parent_id" id="parent_id" class="form-control">
+                                    <option value="">Select Parent Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
             <div class="row">
@@ -41,5 +50,4 @@
             </div>
         </form>
     </section>
-    <!-- /.content -->
 @endsection
